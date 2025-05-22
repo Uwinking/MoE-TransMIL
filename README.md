@@ -1,4 +1,4 @@
-# TransMIL: Transformer based Correlated Multiple Instance Learning for Whole Slide Image Classification [NeurIPS 2021]
+# MoE-TransMIL]
 
 <details>
 <summary>
