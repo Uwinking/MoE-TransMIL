@@ -1,0 +1,707 @@
+cfg: &id019 !!python/object/new:addict.addict.Dict
+  args:
+  - !!python/tuple
+    - General
+    - &id001 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - comment
+        - null
+      - !!python/tuple
+        - seed
+        - 4090
+      - !!python/tuple
+        - fp16
+        - true
+      - !!python/tuple
+        - amp_level
+        - O2
+      - !!python/tuple
+        - precision
+        - 16
+      - !!python/tuple
+        - multi_gpu_mode
+        - dp
+      - !!python/tuple
+        - gpus
+        - '0'
+      - !!python/tuple
+        - epochs
+        - 4
+      - !!python/tuple
+        - grad_acc
+        - 2
+      - !!python/tuple
+        - frozen_bn
+        - false
+      - !!python/tuple
+        - patience
+        - 10
+      - !!python/tuple
+        - server
+        - test
+      - !!python/tuple
+        - log_path
+        - logs/
+      dictitems:
+        amp_level: O2
+        comment: null
+        epochs: 4
+        fp16: true
+        frozen_bn: false
+        gpus: '0'
+        grad_acc: 2
+        log_path: logs/
+        multi_gpu_mode: dp
+        patience: 10
+        precision: 16
+        seed: 4090
+        server: test
+      state: *id001
+  - !!python/tuple
+    - Data
+    - &id004 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - dataset_name
+        - camel_data
+      - !!python/tuple
+        - data_shuffle
+        - true
+      - !!python/tuple
+        - data_dir
+        - Camelyon16/pt_files/
+      - !!python/tuple
+        - label_dir
+        - dataset_csv/camelyon16/
+      - !!python/tuple
+        - fold
+        - '0'
+      - !!python/tuple
+        - nfold
+        - 4
+      - !!python/tuple
+        - train_dataloader
+        - &id002 !!python/object/new:addict.addict.Dict
+          args:
+          - !!python/tuple
+            - batch_size
+            - 1
+          - !!python/tuple
+            - num_workers
+            - 8
+          dictitems:
+            batch_size: 1
+            num_workers: 8
+          state: *id002
+      - !!python/tuple
+        - test_dataloader
+        - &id003 !!python/object/new:addict.addict.Dict
+          args:
+          - !!python/tuple
+            - batch_size
+            - 1
+          - !!python/tuple
+            - num_workers
+            - 8
+          dictitems:
+            batch_size: 1
+            num_workers: 8
+          state: *id003
+      dictitems:
+        data_dir: Camelyon16/pt_files/
+        data_shuffle: true
+        dataset_name: camel_data
+        fold: '0'
+        label_dir: dataset_csv/camelyon16/
+        nfold: 4
+        test_dataloader: *id003
+        train_dataloader: *id002
+      state: *id004
+  - !!python/tuple
+    - Model
+    - &id005 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - name
+        - TransMIL
+      - !!python/tuple
+        - n_classes
+        - 2
+      dictitems:
+        n_classes: 2
+        name: TransMIL
+      state: *id005
+  - !!python/tuple
+    - Optimizer
+    - &id006 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - opt
+        - lookahead_radam
+      - !!python/tuple
+        - lr
+        - 0.0001
+      - !!python/tuple
+        - opt_eps
+        - null
+      - !!python/tuple
+        - opt_betas
+        - null
+      - !!python/tuple
+        - momentum
+        - null
+      - !!python/tuple
+        - weight_decay
+        - 4.5e-06
+      dictitems:
+        lr: 0.0001
+        momentum: null
+        opt: lookahead_radam
+        opt_betas: null
+        opt_eps: null
+        weight_decay: 4.5e-06
+      state: *id006
+  - !!python/tuple
+    - Loss
+    - &id007 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - base_loss
+        - CrossEntropyLoss
+      dictitems:
+        base_loss: CrossEntropyLoss
+      state: *id007
+  - !!python/tuple
+    - config
+    - Camelyon/TransMIL.yaml
+  - !!python/tuple
+    - log_path
+    - &id018 !!python/object/apply:pathlib.PosixPath
+      - logs
+      - Camelyon
+      - TransMIL
+      - fold0
+  - !!python/tuple
+    - load_loggers
+    - &id016
+      - !!python/object:pytorch_lightning.loggers.tensorboard.TensorBoardLogger
+        _agg_default_func: &id008 !!python/name:numpy.mean ''
+        _agg_key_funcs: {}
+        _default_hp_metric: false
+        _experiment: null
+        _fs: &id009 !!python/object/apply:fsspec.spec.make_instance
+        - !!python/name:fsspec.implementations.local.LocalFileSystem ''
+        - !!python/tuple []
+        - {}
+        _kwargs: {}
+        _log_graph: true
+        _metrics_to_agg: []
+        _name: TransMIL
+        _prefix: ''
+        _prev_step: -1
+        _save_dir: logs/Camelyon
+        _version: fold0
+        hparams: {}
+      - !!python/object:pytorch_lightning.loggers.csv_logs.CSVLogger
+        _agg_default_func: *id008
+        _agg_key_funcs: {}
+        _experiment: null
+        _metrics_to_agg: []
+        _name: TransMIL
+        _prefix: ''
+        _prev_step: -1
+        _save_dir: logs/Camelyon
+        _version: fold0
+  - !!python/tuple
+    - callbacks
+    - &id017
+      - &id014 !!python/object:pytorch_lightning.callbacks.early_stopping.EarlyStopping
+        best_score: !!python/object/apply:torch._utils._rebuild_tensor_v2
+        - !!python/object/apply:torch.storage._load_from_bytes
+          - !!binary |
+            gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
+            AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
+            aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
+            Z2UKcQFYCQAAADg3NTQ0Mjc1MnECWAMAAABjcHVxA0sBTnRxBFEugAJdcQBYCQAAADg3NTQ0Mjc1
+            MnEBYS4BAAAAAAAAAAAAgH8=
+        - 0
+        - !!python/tuple []
+        - !!python/tuple []
+        - false
+        - !!python/object/apply:collections.OrderedDict
+          - []
+        min_delta: -0.0
+        mode: min
+        monitor: val_loss
+        patience: 10
+        stopped_epoch: 0
+        strict: true
+        verbose: true
+        wait_count: 0
+        warned_result_obj: false
+      - &id015 !!python/object:pytorch_lightning.callbacks.model_checkpoint.ModelCheckpoint
+        _fs: *id009
+        _last_global_step_saved: -1
+        best_k_models: {}
+        best_model_path: ''
+        best_model_score: null
+        current_score: null
+        dirpath: null
+        filename: null
+        kth_best_model_path: ''
+        kth_value: !!python/object/apply:torch._utils._rebuild_tensor_v2
+        - !!python/object/apply:torch.storage._load_from_bytes
+          - !!binary |
+            gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
+            AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
+            aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
+            Z2UKcQFYCQAAADg3NTQzOTc0NHECWAMAAABjcHVxA0sBTnRxBFEugAJdcQBYCQAAADg3NTQzOTc0
+            NHEBYS4BAAAAAAAAAAAAgH8=
+        - 0
+        - !!python/tuple []
+        - !!python/tuple []
+        - false
+        - !!python/object/apply:collections.OrderedDict
+          - []
+        last_model_path: ''
+        mode: min
+        monitor: null
+        period: 1
+        prefix: ''
+        save_function: null
+        save_last: null
+        save_top_k: null
+        save_weights_only: false
+        verbose: false
+        warned_result_obj: false
+      - &id010 !!python/object:pytorch_lightning.callbacks.progress.ProgressBar
+        _enabled: true
+        _predict_batch_idx: 0
+        _process_position: 0
+        _refresh_rate: 1
+        _test_batch_idx: 0
+        _train_batch_idx: 0
+        _trainer: &id013 !!python/object:pytorch_lightning.trainer.trainer.Trainer
+          _default_root_dir: /data/lzx/bingli/TransMIL-main
+          _is_data_prepared: false
+          _lightning_optimizers: null
+          _multiple_trainloader_mode: max_size_cycle
+          _progress_bar_callback: *id010
+          _running_stage: null
+          _state: !!python/object/apply:pytorch_lightning.trainer.states.TrainerState
+          - INITIALIZING
+          _stochastic_weight_avg: false
+          _weights_save_path: /data/lzx/bingli/TransMIL-main
+          accelerator_connector: !!python/object:pytorch_lightning.trainer.connectors.accelerator_connector.AcceleratorConnector
+            _cluster_environment: !!python/object:pytorch_lightning.plugins.environments.torchelastic_environment.TorchElasticEnvironment
+              _world_size: null
+            _device_type: !!python/object/apply:pytorch_lightning.utilities.enums.DeviceType
+            - GPU
+            _distrib_type: null
+            _precision_plugin: &id011 !!python/object:pytorch_lightning.plugins.precision.native_amp.NativeMixedPrecisionPlugin
+              backend: !!python/object/apply:pytorch_lightning.utilities.enums.AMPType
+              - native
+              scaler: !!python/object:torch.cuda.amp.grad_scaler.GradScaler
+                _backoff_factor: 0.5
+                _enabled: true
+                _growth_factor: 2.0
+                _growth_interval: 2000
+                _growth_tracker: null
+                _init_growth_tracker: 0
+                _init_scale: 65536.0
+                _per_optimizer_states: !!python/object/apply:collections.defaultdict
+                - !!python/name:torch.cuda.amp.grad_scaler._refresh_per_optimizer_state ''
+                _scale: null
+            _training_type_plugin: &id012 !!python/object:pytorch_lightning.plugins.training_type.single_device.SingleDevicePlugin
+              _model: null
+              _results: null
+              device: !!python/object/apply:torch.device
+              - cuda
+              - 0
+              global_rank: 0
+            accelerator: !!python/object:pytorch_lightning.accelerators.gpu.GPUAccelerator
+              lr_schedulers: []
+              optimizer_frequencies: []
+              optimizers: []
+              precision_plugin: *id011
+              training_type_plugin: *id012
+            amp_level: O2
+            amp_type: !!python/object/apply:pytorch_lightning.utilities.enums.AMPType
+            - native
+            auto_select_gpus: false
+            benchmark: false
+            deterministic: true
+            distributed_backend: null
+            global_rank: 0
+            gpus: '0'
+            interactive_ddp_procs: []
+            is_slurm_managing_tasks: false
+            num_nodes: 1
+            num_processes: 1
+            parallel_device_ids:
+            - 0
+            precision: 16
+            replace_sampler_ddp: true
+            sync_batchnorm: false
+            tpu_cores: null
+            world_size: 1
+          accumulate_grad_batches: 2
+          accumulation_scheduler: !!python/object:pytorch_lightning.callbacks.gradient_accumulation_scheduler.GradientAccumulationScheduler
+            epochs:
+            - 0
+            scheduling:
+              0: 2
+          auto_lr_find: false
+          auto_scale_batch_size: false
+          batch_idx: 0
+          callback_connector: !!python/object:pytorch_lightning.trainer.connectors.callback_connector.CallbackConnector
+            trainer: *id013
+          callbacks:
+          - *id014
+          - *id010
+          - *id015
+          check_val_every_n_epoch: 1
+          checkpoint_connector: !!python/object:pytorch_lightning.trainer.connectors.checkpoint_connector.CheckpointConnector
+            has_trained: false
+            trainer: *id013
+          config_validator: !!python/object:pytorch_lightning.trainer.configuration_validator.ConfigValidator
+            trainer: *id013
+          current_epoch: 0
+          data_connector: !!python/object:pytorch_lightning.trainer.connectors.data_connector.DataConnector
+            trainer: *id013
+          datamodule: null
+          debugging_connector: !!python/object:pytorch_lightning.trainer.connectors.debugging_connector.DebuggingConnector
+            trainer: *id013
+          dev_debugger: !!python/object:pytorch_lightning.utilities.debugging.InternalDebugger
+            checkpoint_callback_history: []
+            dataloader_sequence_calls: []
+            early_stopping_history: []
+            enabled: false
+            events: []
+            logged_metrics: []
+            pbar_added_metrics: []
+            saved_lr_scheduler_updates: []
+            saved_test_losses: []
+            saved_train_losses: []
+            saved_val_losses: []
+            test_dataloader_calls: []
+            train_dataloader_calls: []
+            trainer: *id013
+            val_dataloader_calls: []
+          evaluation_loop: !!python/object:pytorch_lightning.trainer.evaluation_loop.EvaluationLoop
+            max_batches: null
+            num_dataloaders: null
+            outputs: []
+            predictions: null
+            step_metrics: []
+            trainer: *id013
+            warning_cache: !!python/object:pytorch_lightning.utilities.warnings.WarningCache
+              warnings: !!set {}
+          fast_dev_run: false
+          flush_logs_every_n_steps: 100
+          global_step: 0
+          gradient_clip_val: 0
+          interrupted: false
+          limit_predict_batches: 1.0
+          limit_test_batches: 1.0
+          limit_train_batches: 1.0
+          limit_val_batches: 1.0
+          log_every_n_steps: 50
+          logger: !!python/object:pytorch_lightning.loggers.base.LoggerCollection
+            _agg_default_func: *id008
+            _agg_key_funcs: {}
+            _logger_iterable: *id016
+            _metrics_to_agg: []
+            _prev_step: -1
+          logger_connector: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.logger_connector.LoggerConnector
+            _cached_results:
+              ? !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+              - train
+              : !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+                - train
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+              ? !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+              - eval
+              : !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+                - eval
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+              ? !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+              - test
+              : !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+                - test
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+              ? !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+              - predict
+              : !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+                - predict
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+              ? !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+              - tune
+              : !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: !!python/object/apply:pytorch_lightning.trainer.states.RunningStage
+                - tune
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+              null: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.epoch_result_store.EpochResultStore
+                _batch_size: null
+                _dataloader_idx: null
+                _has_batch_loop_finished: false
+                _internals: {}
+                _opt_idx: null
+                _split_idx: null
+                _stage: null
+                legacy_batch_log_metrics: {}
+                legacy_batch_pbar_metrics: {}
+                trainer: *id013
+            _callback_hook_validator: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.callback_hook_validator.CallbackHookNameValidator {}
+            _callback_metrics: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.metrics_holder.MetricsHolder
+              _to_float: false
+              metrics: {}
+            _evaluation_callback_metrics: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.metrics_holder.MetricsHolder
+              _to_float: true
+              metrics: {}
+            _logged_metrics: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.metrics_holder.MetricsHolder
+              _to_float: false
+              metrics: {}
+            _progress_bar_metrics: !!python/object:pytorch_lightning.trainer.connectors.logger_connector.metrics_holder.MetricsHolder
+              _to_float: true
+              metrics: {}
+            eval_loop_results: []
+            log_gpu_memory: null
+            trainer: *id013
+          max_epochs: 4
+          max_steps: null
+          min_epochs: 1
+          min_steps: null
+          model_connector: !!python/object:pytorch_lightning.trainer.connectors.model_connector.ModelConnector
+            trainer: *id013
+          move_metrics_to_cpu: false
+          num_sanity_val_batches: []
+          num_sanity_val_steps: 0
+          num_test_batches: []
+          num_training_batches: 0
+          num_val_batches: []
+          optimizer_connector: !!python/object:pytorch_lightning.trainer.connectors.optimizer_connector.OptimizerConnector
+            trainer: *id013
+          overfit_batches: 0.0
+          predict_loop: !!python/object:pytorch_lightning.trainer.predict_loop.PredictLoop
+            max_batches: null
+            num_dataloaders: null
+            trainer: *id013
+          prepare_data_per_node: true
+          profile_connector: !!python/object:pytorch_lightning.trainer.connectors.profiler_connector.ProfilerConnector
+            trainer: *id013
+          profiler: !!python/object:pytorch_lightning.profiler.profilers.PassThroughProfiler
+            write_streams: []
+          reload_dataloaders_every_epoch: false
+          resume_from_checkpoint: null
+          running_sanity_check: false
+          should_stop: false
+          shown_warnings: !!set {}
+          slurm_connector: !!python/object:pytorch_lightning.trainer.connectors.slurm_connector.SLURMConnector
+            trainer: *id013
+          split_idx: null
+          terminate_on_nan: false
+          test_dataloaders: null
+          tested_ckpt_path: null
+          total_batch_idx: 0
+          track_grad_norm: -1.0
+          train_dataloader: null
+          train_loop: !!python/object:pytorch_lightning.trainer.training_loop.TrainLoop
+            _cur_grad_norm_dict: null
+            _curr_step_result: null
+            _multiple_trainloader_mode: max_size_cycle
+            _skip_backward: false
+            _teardown_already_run: false
+            accumulated_loss: null
+            automatic_optimization: true
+            checkpoint_accumulator: null
+            early_stopping_accumulator: null
+            running_loss: !!python/object:pytorch_lightning.trainer.supporters.TensorRunningAccum
+              current_idx: 0
+              last_idx: null
+              memory: null
+              rotated: false
+              window_length: 20
+            trainer: *id013
+            warning_cache: !!python/object:pytorch_lightning.utilities.warnings.WarningCache
+              warnings: !!set {}
+          training_tricks_connector: !!python/object:pytorch_lightning.trainer.connectors.training_trick_connector.TrainingTricksConnector
+            trainer: *id013
+          truncated_bptt_steps: null
+          tuner: !!python/object:pytorch_lightning.tuner.tuning.Tuner
+            trainer: *id013
+          val_check_interval: 1.0
+          val_dataloaders: null
+          verbose_test: true
+          weights_summary: top
+        _val_batch_idx: 0
+        main_progress_bar: null
+        test_progress_bar: null
+        val_progress_bar: null
+  dictitems:
+    Data: *id004
+    General: *id001
+    Loss: *id007
+    Model: *id005
+    Optimizer: *id006
+    callbacks: *id017
+    config: Camelyon/TransMIL.yaml
+    load_loggers: *id016
+    log_path: *id018
+  state: *id019
+data: &id022 !!python/object/new:addict.addict.Dict
+  args:
+  - !!python/tuple
+    - dataset_name
+    - camel_data
+  - !!python/tuple
+    - data_shuffle
+    - true
+  - !!python/tuple
+    - data_dir
+    - Camelyon16/pt_files/
+  - !!python/tuple
+    - label_dir
+    - dataset_csv/camelyon16/
+  - !!python/tuple
+    - fold
+    - '0'
+  - !!python/tuple
+    - nfold
+    - 4
+  - !!python/tuple
+    - train_dataloader
+    - &id020 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - batch_size
+        - 1
+      - !!python/tuple
+        - num_workers
+        - 8
+      dictitems:
+        batch_size: 1
+        num_workers: 8
+      state: *id020
+  - !!python/tuple
+    - test_dataloader
+    - &id021 !!python/object/new:addict.addict.Dict
+      args:
+      - !!python/tuple
+        - batch_size
+        - 1
+      - !!python/tuple
+        - num_workers
+        - 8
+      dictitems:
+        batch_size: 1
+        num_workers: 8
+      state: *id021
+  dictitems:
+    data_dir: Camelyon16/pt_files/
+    data_shuffle: true
+    dataset_name: camel_data
+    fold: '0'
+    label_dir: dataset_csv/camelyon16/
+    nfold: 4
+    test_dataloader: *id021
+    train_dataloader: *id020
+  state: *id022
+log: !!python/object/apply:pathlib.PosixPath
+- logs
+- Camelyon
+- TransMIL
+- fold0
+loss: &id023 !!python/object/new:addict.addict.Dict
+  args:
+  - !!python/tuple
+    - base_loss
+    - CrossEntropyLoss
+  dictitems:
+    base_loss: CrossEntropyLoss
+  state: *id023
+model: &id024 !!python/object/new:addict.addict.Dict
+  args:
+  - !!python/tuple
+    - name
+    - TransMIL
+  - !!python/tuple
+    - n_classes
+    - 2
+  dictitems:
+    n_classes: 2
+    name: TransMIL
+  state: *id024
+optimizer: &id025 !!python/object/new:addict.addict.Dict
+  args:
+  - !!python/tuple
+    - opt
+    - lookahead_radam
+  - !!python/tuple
+    - lr
+    - 0.0001
+  - !!python/tuple
+    - opt_eps
+    - null
+  - !!python/tuple
+    - opt_betas
+    - null
+  - !!python/tuple
+    - momentum
+    - null
+  - !!python/tuple
+    - weight_decay
+    - 4.5e-06
+  dictitems:
+    lr: 0.0001
+    momentum: null
+    opt: lookahead_radam
+    opt_betas: null
+    opt_eps: null
+    weight_decay: 4.5e-06
+  state: *id025
